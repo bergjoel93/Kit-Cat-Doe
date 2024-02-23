@@ -1,0 +1,185 @@
+//JavaScript Stuff
+
+var markers = ["null","null"];
+
+
+var whoseTurn = 0; //initializes variable that tracks whos turn. Player 0 starts.
+
+var totals = [0,0];
+var winCodes = [7,56,73,84,146,273,292,448];
+var gameOver = false;
+
+var players = [];
+
+function setP1Avatar(value)
+{
+	if (value == markers[1])
+	{
+		alert("Pick a different animal.")
+	}
+	else
+	{
+	markers = [value,markers[1]];
+	
+	
+	document.getElementById("kit").className = "";
+	document.getElementById("cat").className = "";
+	document.getElementById("doe").className = "";
+	
+	document.getElementById(value).className = "selected";
+	}
+}
+
+function setP2Avatar(value)
+{
+	
+	if (value == markers[0])
+	{
+		alert("Pick a different animal.")
+	}
+	else
+	{
+	markers = [markers[0],value];
+	
+	document.getElementById("kit"+2).className = "";
+	document.getElementById("cat"+2).className = "";
+	document.getElementById("doe"+2).className = "";
+	
+	document.getElementById(value+2).className = "selected2";
+	}
+	
+}
+
+function setPlayerNames()
+{
+	
+	var x = document.getElementById("player1").value;
+	
+	var y = document.getElementById("player2").value;
+	
+	players = [x,y];
+	
+}
+
+function startGame()
+{
+	if(markers[0] =="null" ||markers[1] =="null" || players[0] =="" ||players[1] =="")
+	{
+		alert("You didn't type your name or pick an animal...")
+	}
+	else
+	{
+	document.getElementById("start-form").className = "hide-start-form";
+  
+	document.getElementById("game").className ="";
+  
+	document.getElementById("game-message").innerText = "It's " + players[whoseTurn]+"'s Turn";
+	}
+}
+
+/* Note: everytime the player clicks, we want it to & it with every single possible value. */
+function playGame(clickedDiv, divValue)
+{
+    if(!gameOver)
+    {
+    // adds X or O to playing field
+    clickedDiv.className = markers[whoseTurn];
+	
+	
+    //toggle players turn
+
+
+    //this collects the score value for players
+    totals[whoseTurn] += divValue;
+
+    if(isWin())
+    {
+      document.getElementById("game-message").innerText = players[whoseTurn] +" Wins!";
+	  document.getElementById("refresh").className = "";
+    }
+
+    else if (gameOver)
+    {
+      document.getElementById("game-message").innerText = "Game Over!";
+	  document.getElementById("refresh").className = "";
+    }
+
+    else {
+
+    if(whoseTurn == 1)
+    {
+      whoseTurn = 0;
+    }
+    else
+      {
+        whoseTurn = 1;
+      }
+      //prevent clicking on same div again.
+      clickedDiv.attributes["1"].nodeValue ="";
+
+      //toggle message to display next player.
+      document.getElementById("game-message").innerText = "It's " + players[whoseTurn]+"'s Turn";
+    }
+  }
+}
+
+// Create a new function to loop through evertyime a turn is gone through.
+
+function isWin()
+{
+  //var windCodes = [7,56,73,84,146,273,292,448];
+  for(i = 0; i < winCodes.length; i++)
+  {
+    if((totals[whoseTurn] & winCodes[i]) == winCodes[i])
+    {
+      gameOver = true;
+      return true;
+    }
+  }
+
+  if(totals[0] + totals[1] == 511)
+  {
+    gameOver = true;
+  }
+
+  return false;
+}
+
+
+//Function that resets and clears game board
+
+
+
+function resetGame()
+{
+	// clickedDiv.attributes["0"].nodeValue ="";
+	
+	document.getElementById("a2").attributes["1"].nodeValue="playGame(this,2)";
+	document.getElementById("a1").attributes["1"].nodeValue="playGame(this,1)";
+	document.getElementById("a3").attributes["1"].nodeValue="playGame(this,4)";
+	document.getElementById("a4").attributes["1"].nodeValue="playGame(this,8)";
+	document.getElementById("a5").attributes["1"].nodeValue="playGame(this,16)";
+	document.getElementById("a6").attributes["1"].nodeValue="playGame(this,32)";
+	document.getElementById("a7").attributes["1"].nodeValue="playGame(this,64)";
+	document.getElementById("a8").attributes["1"].nodeValue="playGame(this,128)";
+	document.getElementById("a9").attributes["1"].nodeValue="playGame(this,256)";
+	
+	document.getElementById("a2").className = "";
+	document.getElementById("a1").className = "";
+	document.getElementById("a3").className = "";
+	document.getElementById("a4").className = "";
+	document.getElementById("a5").className = "";
+	document.getElementById("a6").className = "";
+	document.getElementById("a7").className = "";
+	document.getElementById("a8").className = "";
+	document.getElementById("a9").className = "";
+	
+	totals = [0,0];
+	gameOver = false;
+	whoseTurn = 0;
+	
+	document.getElementById("game-message").innerText = "Kit-Cat-Doe";
+	document.getElementById("refresh").className = "refresh";
+	
+	
+  }
